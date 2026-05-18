@@ -74,13 +74,53 @@
             data-lang="cs"
             onclick="setLanguage('cs')"
           >
-            <span class="flag">🇨🇿</span> CZ
+            <span class="flag">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 9 6"
+                width="20"
+                height="15"
+              >
+                <!-- Верхняя белая часть -->
+                <rect width="9" height="3" fill="#dadae0" />
+
+                <!-- Нижняя красная часть -->
+                <rect y="3" width="9" height="3" fill="#d7141a" />
+
+                <!-- Синий треугольник -->
+                <path d="M0 0 L4 3 L0 6 Z" fill="#11457e" />
+              </svg>
+            </span>
+            CZ
           </button>
           <button class="lang-btn" data-lang="ru" onclick="setLanguage('ru')">
-            <span class="flag">🇷🇺</span> RU
+            <span class="flag"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 9 6"
+                width="20"
+                height="15"
+              >
+                <path d="m0 0h9v2H0" fill="#dadae0" />
+                <path d="m0 2h9v2H0" fill="#0039a6" />
+                <path d="m0 4h9v2H0" fill="#d52b1e" />
+              </svg>
+            </span>
+            RU
           </button>
           <button class="lang-btn" data-lang="uk" onclick="setLanguage('uk')">
-            <span class="flag">🇺🇦</span> UA
+            <span class="flag"
+              ><svg
+                xmlns="http://w3.org"
+                width="20"
+                height="15"
+                viewBox="0 0 900 600"
+              >
+                <rect fill="#005BBB" width="100%" height="50%" />
+                <rect fill="#FFD500" y="300" width="100%" height="50%" />
+              </svg>
+            </span>
+            UA
           </button>
         </div>
       </div>
@@ -109,7 +149,30 @@
         Obvykle odpovídáme do 15 minut
       </p>
       <div class="lang-badge">
-        <div class="badge-flags">🇨🇿 🇷🇺 🇺🇦</div>
+        <div class="badge-flags">
+          <span>
+            <svg viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg">
+              <rect width="9" height="3" fill="#ffffff" />
+              <rect y="3" width="9" height="3" fill="#d7141a" />
+              <path d="M0 0 L4 3 L0 6 Z" fill="#11457e" />
+            </svg>
+          </span>
+
+          <span>
+            <svg viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg">
+              <rect width="9" height="2" fill="#ffffff" />
+              <rect y="2" width="9" height="2" fill="#0039a6" />
+              <rect y="4" width="9" height="2" fill="#d52b1e" />
+            </svg>
+          </span>
+
+          <span>
+            <svg viewBox="0 0 9 6" xmlns="http://www.w3.org/2000/svg">
+              <rect width="9" height="3" fill="#0057b7" />
+              <rect y="3" width="9" height="3" fill="#ffd700" />
+            </svg>
+          </span>
+        </div>
         <span class="badge-text" data-i18n="hero-langs"
           >Mluvíme česky, rusky a ukrajinsky</span
         >
