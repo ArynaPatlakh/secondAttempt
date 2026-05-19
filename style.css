@@ -428,6 +428,12 @@ nav {
   justify-content: center;
 }
 
+@media (max-width: 1024px) {
+  .portfolio-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  }
+}
+
 @media (max-width: 600px) {
   .portfolio-grid {
     grid-template-columns: 1fr;
@@ -621,8 +627,8 @@ nav {
 
 @media (max-width: 1024px) {
   .reviews-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-
+    /* grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); */
+    grid-template-columns: repeat(2, minmax(230px, 1fr));
     padding: 40px;
     justify-content: center;
   }

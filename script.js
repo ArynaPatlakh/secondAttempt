@@ -321,9 +321,18 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 0;
   const perPage = 3;
 
-  function isMobile() {
-    return window.innerWidth <= 600;
+  function getPerPage() {
+    if (window.innerWidth <= 600) return 1; // mobile
+    if (window.innerWidth <= 1024) return 4; // tablet
+    return 3; // desktop
   }
+  // function isMobile() {
+  //   return window.innerWidth <= 600;
+  // }
+
+  //  function isTablet() {
+  //    return window.innerWidth <= 1024;
+  //  }
 
   function renderReviews() {
     grid.innerHTML = "";
@@ -336,20 +345,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.className = "review-card";
 
-      // card.innerHTML = `
-      //   <div class="review-stars">${stars(r.rating)}</div>
-
-      //   <p class="review-text">${r.text}</p>
-      //   <button class="read-more">Read more</button>
-
-      //   <div class="reviewer">
-      //     <div class="avatar ${r.color}">${r.avatar}</div>
-      //     <div>
-      //       <div class="reviewer-name">${r.name}</div>
-      //       <div class="reviewer-location">${r.location}</div>
-      //     </div>
-      //   </div>
-      // `;
       const t = translations[currentLang];
 
       card.innerHTML = `
@@ -369,50 +364,96 @@ document.addEventListener("DOMContentLoaded", () => {
       grid.appendChild(card);
     });
 
-    // initReadMore();
+  }
+  function renderReviews() {
+    grid.innerHTML = "";
+
+    const perPage = getPerPage();
+
+    const t = translations[currentLang];
+
+    const start = currentPage * perPage;
+    const visible = reviews.slice(start, start + perPage);
+
+    visible.forEach((r) => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+
+      card.innerHTML = `
+      <div class="review-stars">${stars(r.rating)}</div>
+
+      <p class="review-text">${r.text}</p>
+      <button class="read-more">${t["read-more"]}</button>
+
+      <div class="reviewer">
+        <div class="avatar ${r.color}">${r.avatar}</div>
+        <div>
+          <div class="reviewer-name">${r.name}</div>
+          <div class="reviewer-location">${r.location}</div>
+        </div>
+      </div>
+    `;
+
+      grid.appendChild(card);
+    });
   }
 
   // --- NEXT / PREV ---
+  // function nextPage() {
+  //   if (isMobile()) {
+  //     currentPage = (currentPage + 1) % reviews.length;
+  //   } else {
+  //     const maxPage = Math.ceil(reviews.length / perPage);
+  //     currentPage = (currentPage + 1) % maxPage;
+  //   }
+  //   renderReviews();
+  // }
+
   function nextPage() {
-    if (isMobile()) {
-      currentPage = (currentPage + 1) % reviews.length;
-    } else {
-      const maxPage = Math.ceil(reviews.length / perPage);
-      currentPage = (currentPage + 1) % maxPage;
-    }
+    const perPage = getPerPage();
+    const maxPage = Math.ceil(reviews.length / perPage);
+
+    currentPage = (currentPage + 1) % maxPage;
     renderReviews();
   }
+
+  // function prevPage() {
+  //   if (isMobile()) {
+  //     currentPage = (currentPage - 1 + reviews.length) % reviews.length;
+  //   } else {
+  //     const maxPage = Math.ceil(reviews.length / perPage);
+  //     currentPage = (currentPage - 1 + maxPage) % maxPage;
+  //   }
+  //   renderReviews();
+  // }
 
   function prevPage() {
-    if (isMobile()) {
-      currentPage = (currentPage - 1 + reviews.length) % reviews.length;
-    } else {
-      const maxPage = Math.ceil(reviews.length / perPage);
-      currentPage = (currentPage - 1 + maxPage) % maxPage;
-    }
+    const perPage = getPerPage();
+    const maxPage = Math.ceil(reviews.length / perPage);
+
+    currentPage = (currentPage - 1 + maxPage) % maxPage;
     renderReviews();
   }
-
   nextBtn?.addEventListener("click", nextPage);
   prevBtn?.addEventListener("click", prevPage);
 
   // --- SWIPE (mobile) ---
-  let startX = 0;
+  // let startX = 0;
 
-  grid.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  });
+  // grid.addEventListener("touchstart", (e) => {
+  //   startX = e.touches[0].clientX;
+  // });
 
-  grid.addEventListener("touchend", (e) => {
-    if (!isMobile()) return;
+  // grid.addEventListener("touchend", (e) => {
+  //   if (!isMobile()) return;
 
-    let diff = startX - e.changedTouches[0].clientX;
+  //   let diff = startX - e.changedTouches[0].clientX;
 
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) nextPage();
-      else prevPage();
-    }
-  });
+  //   if (Math.abs(diff) > 40) {
+  //     if (diff > 0) nextPage();
+  //     else prevPage();
+  //   }
+  // });
 
   // --- READ MORE ---
   grid.addEventListener("click", (e) => {
@@ -432,7 +473,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderReviews();
 
-  window.addEventListener("resize", renderReviews);
+  // window.addEventListener("resize", renderReviews);
+  window.addEventListener("resize", () => {
+    currentPage = 0;
+    renderReviews();
+  });
 });
 
 document.querySelectorAll(".carousel").forEach((carousel) => {
@@ -479,37 +524,37 @@ document.querySelectorAll(".carousel").forEach((carousel) => {
   });
 
   // --- AUTOPLAY ---
-  function startAutoplay() {
-    timer = setInterval(next, 4000);
-  }
+  // function startAutoplay() {
+  //   timer = setInterval(next, 4000);
+  // }
 
-  function resetAutoplay() {
-    clearInterval(timer);
-    startAutoplay();
-  }
+  // function resetAutoplay() {
+  //   clearInterval(timer);
+  //   startAutoplay();
+  // }
 
-  startAutoplay();
+  // startAutoplay();
 
   // --- SWIPE ---
-  let startX = 0;
-  let endX = 0;
+  // let startX = 0;
+  // let endX = 0;
 
-  carousel.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  });
+  // carousel.addEventListener("touchstart", (e) => {
+  //   startX = e.touches[0].clientX;
+  // });
 
-  carousel.addEventListener("touchend", (e) => {
-    endX = e.changedTouches[0].clientX;
+  // carousel.addEventListener("touchend", (e) => {
+  //   endX = e.changedTouches[0].clientX;
 
-    const diff = startX - endX;
+  //   const diff = startX - endX;
 
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) next();
-      else prev();
+  //   if (Math.abs(diff) > 40) {
+  //     if (diff > 0) next();
+  //     else prev();
 
-      resetAutoplay();
-    }
-  });
+  //     resetAutoplay();
+  //   }
+  // });
 
   // init
   show(0);
