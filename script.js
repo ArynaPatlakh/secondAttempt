@@ -1,3 +1,5 @@
+//! Language Changaes 
+let currentLang = "cs";
 const translations = {
   cs: {
     "nav-location": "Praha · 7 dní v týdnu",
@@ -55,6 +57,8 @@ const translations = {
     "reviews-label": "Reference zákazníků",
     "reviews-title": "Co říkají naši zákazníci",
     "rating-text": "na Google Maps",
+    "read-more": "Zobrazit více",
+    "show-less": "Zobrazit méně",
     // "review1-text":
     //   '„Opravili únik ve stejný den. Rychle, pečlivě, cena férová. Určitě se obrátím znovu."',
     // "review2-text":
@@ -91,7 +95,7 @@ const translations = {
     "services-label": "Что мы делаем",
     "services-title": "Наши услуги",
     "services-sub":
-      "Беремся за любую задачу по дому — и в квартире, и на даче (chata / chalupa)",
+      "Беремся за любую задачу по дому — и в квартире, и на даче.",
     "svc1-name": "Прочистка канализации",
     "svc1-desc":
       "Устраняем засоры в раковинах, ваннах, туалетах и трубах. Быстро и без грязи.",
@@ -131,18 +135,8 @@ const translations = {
     "reviews-label": "Отзывы клиентов",
     "reviews-title": "Что говорят наши клиенты",
     "rating-text": "на Google Maps",
-    // "review1-text":
-    //   "«Устранили течь в тот же день. Быстро, аккуратно, цена честная. Обязательно обращусь снова.»",
-    // "review2-text":
-    //   "«Ответили в WhatsApp сразу. Приехали утром, поменяли розетку. Профессионально и без лишних слов.»",
-    // "review3-text":
-    //   "«Покрасили всю квартиру — чисто, вовремя, результат отличный. Очень рекомендую!»",
-    // "rev1-name": "Мартин Н.",
-    // "rev1-loc": "Прага 3",
-    // "rev2-name": "Люция К.",
-    // "rev2-loc": "Прага 6",
-    // "rev3-name": "Яна П.",
-    // "rev3-loc": "Прага 10",
+    "read-more": "Показать больше",
+    "show-less": "Свернуть",
     "cta-eyebrow": "Контакт",
     "cta-title": "Напишите нам на WhatsApp",
     "cta-sub":
@@ -167,7 +161,7 @@ const translations = {
     "services-label": "Що ми робимо",
     "services-title": "Наші послуги",
     "services-sub":
-      "Беремось за будь-яке завдання вдома — і в квартирі, і на дачі (chata / chalupa)",
+      "Беремось за будь-яке завдання вдома — і в квартирі, і на дачі.",
     "svc1-name": "Прочищення каналізації",
     "svc1-desc":
       "Усуваємо засори в раковинах, ваннах, туалетах і трубах. Швидко і без бруду.",
@@ -207,18 +201,8 @@ const translations = {
     "reviews-label": "Відгуки клієнтів",
     "reviews-title": "Що кажуть наші клієнти",
     "rating-text": "на Google Maps",
-    // "review1-text":
-    //   "«Усунули витік того ж дня. Швидко, акуратно, ціна чесна. Обов'язково звернусь знову.»",
-    // "review2-text":
-    //   "«Відповіли у WhatsApp одразу. Приїхали вранці, замінили розетку. Професійно і без зайвих слів.»",
-    // "review3-text":
-    //   "«Пофарбували всю квартиру — чисто, вчасно, результат відмінний. Дуже рекомендую!»",
-    // "rev1-name": "Мартін Н.",
-    // "rev1-loc": "Прага 3",
-    // "rev2-name": "Люція К.",
-    // "rev2-loc": "Прага 6",
-    // "rev3-name": "Яна П.",
-    // "rev3-loc": "Прага 10",
+    "read-more": "Показати більше",
+    "show-less": "Свернуть",
     "cta-eyebrow": "Контакт",
     "cta-title": "Напишіть нам у WhatsApp",
     "cta-sub":
@@ -229,6 +213,227 @@ const translations = {
     "footer-copy": "© 2026 OpravyPraha.cz — Усі права захищені",
   },
 };
+function setLanguage(lang) {
+  const t = translations[lang];
+  if (!t) return;
+
+  currentLang = lang;
+
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.dataset.i18n;
+    if (t[key] === undefined) return;
+    if (key === "hero-h1") {
+      el.innerHTML = t[key];
+    } else {
+      el.textContent = t[key];
+    }
+  });
+
+  document.querySelectorAll(".read-more").forEach((btn) => {
+  const expanded = btn.classList.contains("expanded");
+
+  btn.textContent = expanded
+    ? t["read-less"]
+    : t["read-more"];
+  });
+  
+  document.querySelectorAll(".lang-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+  try {
+    localStorage.setItem("lang", lang);
+  } catch (e) {}
+}
+
+const saved = (() => {
+  try {
+    return localStorage.getItem("lang");
+  } catch (e) {
+    return null;
+  }
+})();
+setLanguage(saved && translations[saved] ? saved : "cs");
+// ! Reviews manually by JSON
+
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.querySelector(".reviews-grid");
+  const nextBtn = document.querySelector(".reviews-next");
+  const prevBtn = document.querySelector(".reviews-prev");
+
+  if (!grid) return;
+
+  const reviews = [
+    {
+      name: "Brittney Trefford",
+      location: "Praha",
+      text: "We highly recommend! This is the second time we've called on him for various tasks at home. He understands the job and does everything well. Today he installed these metal laundry drying racks from NaturalGoodsBerlin above our bath. It was hard work drilling into a concrete ceiling but all was done in 3 hours! Very efficient and professional!",
+      rating: 5,
+      avatar: "B",
+      color: "blue",
+    },
+    {
+      name: "Volodymyr",
+      location: "Praha",
+      text: "Velká spokojenost. Potřeboval jsem sestavit nábytek z IKEA a všechno proběhlo rychle a bez problémů. Hodinový manžel přijel včas, měl vlastní nářadí a práce byla hotová velmi profesionálně. Určitě doporučuji každému, kdo hledá řemeslníka v Praze.",
+      rating: 5,
+      avatar: "V",
+      color: "orange",
+    },
+    {
+      name: "Anastasiya Kr",
+      location: "Praha",
+      text: "Potřeboval jsem pomoc s montáží nábytku . Domluva byla rychlá, přijel přesně na čas a práce byla hotová pečlivě. Velmi ochotný a spolehlivý hodinový manžel. Doporučuji.",
+      rating: 5,
+      avatar: "AK",
+      color: "green",
+    },
+    {
+      name: "Antonin",
+      location: " ",
+      text: "Objednali jsme si službu Muž na hodinu na opravu postele a byli jsme moc spokojení. Pan přijel včas, rychle našel problém a opravil vše profesionálně. Postel je teď pevná a stabilní, práce byla odvedena pečlivě a za férovou cenu. Určitě doporučujeme a rádi se na něj znovu obrátíme.",
+      rating: 5,
+      avatar: "A",
+      color: "blue",
+    },
+    {
+      name: "Kenny Vladi",
+      location: "Praha",
+      text: "Jevgenij je vynikající hodinový manžel! Plánovala jsem vyhodit svou rozbitou postel, na které se nedalo ležet na jedné straně, protože mé pokusy o opravu rámu byly neúspěšné. Jevgenij navrhl, abych postel nevynášela, a nabídl pomoc s opravou. Nakonec odvedl perfektní práci, naslouchal mým potřebám. Práce byla rychlá a cena byla docela rozumná. Znovu ho využiji a vřele ho doporučuji! Postel už měsíc vypadá jako nová a konečně můžu používat obě strany.",
+      rating: 5,
+      avatar: "KV",
+      color: "orange",
+    },
+    {
+      name: "Eva",
+      location: "Praha",
+      text: "Obrátili jsme se na ně s žádostí o sestavení skříně a postele. Vše bylo provedeno rychle a kvalitně. Určitě se obrátíme znovu!",
+      rating: 5,
+      avatar: "E",
+      color: "green",
+    },
+  ];
+
+  function stars(n) {
+    return "★★★★★".slice(0, n);
+  }
+
+  let currentPage = 0;
+  const perPage = 3;
+
+  function isMobile() {
+    return window.innerWidth <= 600;
+  }
+
+  function renderReviews() {
+    grid.innerHTML = "";
+
+    const visible = isMobile()
+      ? [reviews[currentPage]]
+      : reviews.slice(currentPage * perPage, currentPage * perPage + perPage); // 💻 3 карточки
+
+    visible.forEach((r) => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+
+      // card.innerHTML = `
+      //   <div class="review-stars">${stars(r.rating)}</div>
+
+      //   <p class="review-text">${r.text}</p>
+      //   <button class="read-more">Read more</button>
+
+      //   <div class="reviewer">
+      //     <div class="avatar ${r.color}">${r.avatar}</div>
+      //     <div>
+      //       <div class="reviewer-name">${r.name}</div>
+      //       <div class="reviewer-location">${r.location}</div>
+      //     </div>
+      //   </div>
+      // `;
+      const t = translations[currentLang];
+
+      card.innerHTML = `
+  <div class="review-stars">${stars(r.rating)}</div>
+
+  <p class="review-text">${r.text}</p>
+  <button class="read-more">${t["read-more"]}</button>
+
+  <div class="reviewer">
+    <div class="avatar ${r.color}">${r.avatar}</div>
+    <div>
+      <div class="reviewer-name">${r.name}</div>
+      <div class="reviewer-location">${r.location}</div>
+    </div>
+  </div>
+`;
+      grid.appendChild(card);
+    });
+
+    // initReadMore();
+  }
+
+  // --- NEXT / PREV ---
+  function nextPage() {
+    if (isMobile()) {
+      currentPage = (currentPage + 1) % reviews.length;
+    } else {
+      const maxPage = Math.ceil(reviews.length / perPage);
+      currentPage = (currentPage + 1) % maxPage;
+    }
+    renderReviews();
+  }
+
+  function prevPage() {
+    if (isMobile()) {
+      currentPage = (currentPage - 1 + reviews.length) % reviews.length;
+    } else {
+      const maxPage = Math.ceil(reviews.length / perPage);
+      currentPage = (currentPage - 1 + maxPage) % maxPage;
+    }
+    renderReviews();
+  }
+
+  nextBtn?.addEventListener("click", nextPage);
+  prevBtn?.addEventListener("click", prevPage);
+
+  // --- SWIPE (mobile) ---
+  let startX = 0;
+
+  grid.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  grid.addEventListener("touchend", (e) => {
+    if (!isMobile()) return;
+
+    let diff = startX - e.changedTouches[0].clientX;
+
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) nextPage();
+      else prevPage();
+    }
+  });
+
+  // --- READ MORE ---
+  grid.addEventListener("click", (e) => {
+     const t = translations[currentLang];
+    const btn = e.target.closest(".read-more");
+    if (!btn) return;
+
+    const text = btn.parentElement.querySelector(".review-text");
+    if (!text) return;
+
+    text.classList.toggle("expanded");
+
+    btn.textContent = text.classList.contains("expanded")
+      ? `${t["show-less"]}`
+      : `${t["read-more"]}`;
+  });
+
+  renderReviews();
+
+  window.addEventListener("resize", renderReviews);
+});
 
 document.querySelectorAll(".carousel").forEach((carousel) => {
   const slides = carousel.querySelectorAll(".slides img");
@@ -308,200 +513,4 @@ document.querySelectorAll(".carousel").forEach((carousel) => {
 
   // init
   show(0);
-});
-
-function setLanguage(lang) {
-  const t = translations[lang];
-  if (!t) return;
-  document.documentElement.lang = lang;
-  document.querySelectorAll("[data-i18n]").forEach((el) => {
-    const key = el.dataset.i18n;
-    if (t[key] === undefined) return;
-    if (key === "hero-h1") {
-      el.innerHTML = t[key];
-    } else {
-      el.textContent = t[key];
-    }
-  });
-  document.querySelectorAll(".lang-btn").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.lang === lang);
-  });
-  try {
-    localStorage.setItem("lang", lang);
-  } catch (e) {}
-}
-
-const saved = (() => {
-  try {
-    return localStorage.getItem("lang");
-  } catch (e) {
-    return null;
-  }
-})();
-setLanguage(saved && translations[saved] ? saved : "cs");
-
-// ! Reviews manually by JSON
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const grid = document.querySelector(".reviews-grid");
-  const nextBtn = document.querySelector(".reviews-next");
-  const prevBtn = document.querySelector(".reviews-prev");
-
-  if (!grid) return;
-
-  const reviews = [
-    {
-      name: "Brittney Trefford",
-      location: "Praha",
-      text: "We highly recommend! This is the second time we've called on him for various tasks at home. He understands the job and does everything well. Today he installed these metal laundry drying racks from NaturalGoodsBerlin above our bath. It was hard work drilling into a concrete ceiling but all was done in 3 hours! Very efficient and professional!",
-      rating: 5,
-      avatar: "B",
-      color: "blue",
-    },
-    {
-      name: "Volodymyr",
-      location: "Praha",
-      text: "Velká spokojenost. Potřeboval jsem sestavit nábytek z IKEA a všechno proběhlo rychle a bez problémů. Hodinový manžel přijel včas, měl vlastní nářadí a práce byla hotová velmi profesionálně. Určitě doporučuji každému, kdo hledá řemeslníka v Praze.",
-      rating: 5,
-      avatar: "V",
-      color: "orange",
-    },
-    {
-      name: "Anastasiya Kr",
-      location: "Praha",
-      text: "Potřeboval jsem pomoc s montáží nábytku . Domluva byla rychlá, přijel přesně na čas a práce byla hotová pečlivě. Velmi ochotný a spolehlivý hodinový manžel. Doporučuji.",
-      rating: 5,
-      avatar: "AK",
-      color: "green",
-    },
-    {
-      name: "Antonin",
-      location: " ",
-      text: "Objednali jsme si službu Muž na hodinu na opravu postele a byli jsme moc spokojení. Pan přijel včas, rychle našel problém a opravil vše profesionálně. Postel je teď pevná a stabilní, práce byla odvedena pečlivě a za férovou cenu. Určitě doporučujeme a rádi se na něj znovu obrátíme.",
-      rating: 5,
-      avatar: "A",
-      color: "blue",
-    },
-    {
-      name: "Kenny Vladi",
-      location: "Praha",
-      text: "Jevgenij je vynikající hodinový manžel! Plánovala jsem vyhodit svou rozbitou postel, na které se nedalo ležet na jedné straně, protože mé pokusy o opravu rámu byly neúspěšné. Jevgenij navrhl, abych postel nevynášela, a nabídl pomoc s opravou. Nakonec odvedl perfektní práci, naslouchal mým potřebám. Práce byla rychlá a cena byla docela rozumná. Znovu ho využiji a vřele ho doporučuji! Postel už měsíc vypadá jako nová a konečně můžu používat obě strany.",
-      rating: 5,
-      avatar: "KV",
-      color: "orange",
-    },
-    {
-      name: "Eva",
-      location: "Praha",
-      text: "Obrátili jsme se na ně s žádostí o sestavení skříně a postele. Vše bylo provedeno rychle a kvalitně. Určitě se obrátíme znovu!",
-      rating: 5,
-      avatar: "E",
-      color: "green",
-    },
-  ];
-
-  function stars(n) {
-    return "★★★★★".slice(0, n);
-  }
-
-  let currentPage = 0;
-  const perPage = 3;
-
-  function isMobile() {
-    return window.innerWidth <= 600;
-  }
-
-  function renderReviews() {
-    grid.innerHTML = "";
-
-    const visible = isMobile()
-      ? [reviews[currentPage]] 
-      : reviews.slice(currentPage * perPage, currentPage * perPage + perPage); // 💻 3 карточки
-
-    visible.forEach((r) => {
-      const card = document.createElement("div");
-      card.className = "review-card";
-
-      card.innerHTML = `
-        <div class="review-stars">${stars(r.rating)}</div>
-
-        <p class="review-text">${r.text}</p>
-        <button class="read-more">Read more</button>
-
-        <div class="reviewer">
-          <div class="avatar ${r.color}">${r.avatar}</div>
-          <div>
-            <div class="reviewer-name">${r.name}</div>
-            <div class="reviewer-location">${r.location}</div>
-          </div>
-        </div>
-      `;
-
-      grid.appendChild(card);
-    });
-
-    initReadMore();
-  }
-
-  // --- NEXT / PREV ---
-  function nextPage() {
-    if (isMobile()) {
-      currentPage = (currentPage + 1) % reviews.length;
-    } else {
-      const maxPage = Math.ceil(reviews.length / perPage);
-      currentPage = (currentPage + 1) % maxPage;
-    }
-    renderReviews();
-  }
-
-  function prevPage() {
-    if (isMobile()) {
-      currentPage = (currentPage - 1 + reviews.length) % reviews.length;
-    } else {
-      const maxPage = Math.ceil(reviews.length / perPage);
-      currentPage = (currentPage - 1 + maxPage) % maxPage;
-    }
-    renderReviews();
-  }
-
-  nextBtn?.addEventListener("click", nextPage);
-  prevBtn?.addEventListener("click", prevPage);
-
-  // --- SWIPE (mobile) ---
-  let startX = 0;
-
-  grid.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  });
-
-  grid.addEventListener("touchend", (e) => {
-    if (!isMobile()) return;
-
-    let diff = startX - e.changedTouches[0].clientX;
-
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) nextPage();
-      else prevPage();
-    }
-  });
-
-  // --- READ MORE ---
-  grid.addEventListener("click", (e) => {
-    const btn = e.target.closest(".read-more");
-    if (!btn) return;
-
-    const text = btn.parentElement.querySelector(".review-text");
-    if (!text) return;
-
-    text.classList.toggle("expanded");
-
-    btn.textContent = text.classList.contains("expanded")
-      ? "Show less"
-      : "Read more";
-  });
-
-  renderReviews();
-
-  window.addEventListener("resize", renderReviews);
 });
