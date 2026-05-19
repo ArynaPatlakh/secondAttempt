@@ -1,4 +1,4 @@
-//! Language Changaes 
+//! Language Changaes
 let currentLang = "cs";
 const translations = {
   cs: {
@@ -59,18 +59,6 @@ const translations = {
     "rating-text": "na Google Maps",
     "read-more": "Zobrazit více",
     "show-less": "Zobrazit méně",
-    // "review1-text":
-    //   '„Opravili únik ve stejný den. Rychle, pečlivě, cena férová. Určitě se obrátím znovu."',
-    // "review2-text":
-    //   '„Na WhatsApp odpověděli hned. Přijeli ráno, vyměnili zásuvku. Profesionálně a bez zbytečných řečí."',
-    // "review3-text":
-    //   '„Vymalovali celý byt — čistě, včas, výsledek skvělý. Velmi doporučuji!"',
-    // "rev1-name": "Martin N.",
-    // "rev1-loc": "Praha 3",
-    // "rev2-name": "Lucie K.",
-    // "rev2-loc": "Praha 6",
-    // "rev3-name": "Jana P.",
-    // "rev3-loc": "Praha 10",
     "cta-eyebrow": "Kontakt",
     "cta-title": "Napište nám na WhatsApp",
     "cta-sub":
@@ -231,13 +219,11 @@ function setLanguage(lang) {
   });
 
   document.querySelectorAll(".read-more").forEach((btn) => {
-  const expanded = btn.classList.contains("expanded");
+    const expanded = btn.classList.contains("expanded");
 
-  btn.textContent = expanded
-    ? t["read-less"]
-    : t["read-more"];
+    btn.textContent = expanded ? t["read-less"] : t["read-more"];
   });
-  
+
   document.querySelectorAll(".lang-btn").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
@@ -326,13 +312,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (window.innerWidth <= 1024) return 4; // tablet
     return 3; // desktop
   }
-  // function isMobile() {
-  //   return window.innerWidth <= 600;
-  // }
-
-  //  function isTablet() {
-  //    return window.innerWidth <= 1024;
-  //  }
 
   function renderReviews() {
     grid.innerHTML = "";
@@ -363,7 +342,6 @@ document.addEventListener("DOMContentLoaded", () => {
 `;
       grid.appendChild(card);
     });
-
   }
   function renderReviews() {
     grid.innerHTML = "";
@@ -398,16 +376,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- NEXT / PREV ---
-  // function nextPage() {
-  //   if (isMobile()) {
-  //     currentPage = (currentPage + 1) % reviews.length;
-  //   } else {
-  //     const maxPage = Math.ceil(reviews.length / perPage);
-  //     currentPage = (currentPage + 1) % maxPage;
-  //   }
-  //   renderReviews();
-  // }
 
   function nextPage() {
     const perPage = getPerPage();
@@ -416,16 +384,6 @@ document.addEventListener("DOMContentLoaded", () => {
     currentPage = (currentPage + 1) % maxPage;
     renderReviews();
   }
-
-  // function prevPage() {
-  //   if (isMobile()) {
-  //     currentPage = (currentPage - 1 + reviews.length) % reviews.length;
-  //   } else {
-  //     const maxPage = Math.ceil(reviews.length / perPage);
-  //     currentPage = (currentPage - 1 + maxPage) % maxPage;
-  //   }
-  //   renderReviews();
-  // }
 
   function prevPage() {
     const perPage = getPerPage();
@@ -437,27 +395,9 @@ document.addEventListener("DOMContentLoaded", () => {
   nextBtn?.addEventListener("click", nextPage);
   prevBtn?.addEventListener("click", prevPage);
 
-  // --- SWIPE (mobile) ---
-  // let startX = 0;
-
-  // grid.addEventListener("touchstart", (e) => {
-  //   startX = e.touches[0].clientX;
-  // });
-
-  // grid.addEventListener("touchend", (e) => {
-  //   if (!isMobile()) return;
-
-  //   let diff = startX - e.changedTouches[0].clientX;
-
-  //   if (Math.abs(diff) > 40) {
-  //     if (diff > 0) nextPage();
-  //     else prevPage();
-  //   }
-  // });
-
   // --- READ MORE ---
   grid.addEventListener("click", (e) => {
-     const t = translations[currentLang];
+    const t = translations[currentLang];
     const btn = e.target.closest(".read-more");
     if (!btn) return;
 
@@ -473,7 +413,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderReviews();
 
-  // window.addEventListener("resize", renderReviews);
   window.addEventListener("resize", () => {
     currentPage = 0;
     renderReviews();
@@ -523,39 +462,6 @@ document.querySelectorAll(".carousel").forEach((carousel) => {
     resetAutoplay();
   });
 
-  // --- AUTOPLAY ---
-  // function startAutoplay() {
-  //   timer = setInterval(next, 4000);
-  // }
-
-  // function resetAutoplay() {
-  //   clearInterval(timer);
-  //   startAutoplay();
-  // }
-
-  // startAutoplay();
-
-  // --- SWIPE ---
-  // let startX = 0;
-  // let endX = 0;
-
-  // carousel.addEventListener("touchstart", (e) => {
-  //   startX = e.touches[0].clientX;
-  // });
-
-  // carousel.addEventListener("touchend", (e) => {
-  //   endX = e.changedTouches[0].clientX;
-
-  //   const diff = startX - endX;
-
-  //   if (Math.abs(diff) > 40) {
-  //     if (diff > 0) next();
-  //     else prev();
-
-  //     resetAutoplay();
-  //   }
-  // });
-
-  // init
+  
   show(0);
 });
