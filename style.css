@@ -10,6 +10,10 @@ body {
   background: #fff;
 }
 
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
 /* ── FLOATING WA ── */
 .wa-float {
   position: fixed;
@@ -54,7 +58,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-z-index: 2147483647;
+  z-index: 2147483647;
   padding: 14px 40px;
   display: flex;
   align-items: center;
@@ -535,8 +539,20 @@ z-index: 2147483647;
 }
 
 .rating-text {
-  color: #3a5568;
+  color: #2a6c9c;
   font-size: 14px;
+  transition: transform 0.5s ease;
+}
+
+a > .rating-text {
+  text-decoration: underline;
+ 
+}
+a > .rating-text:hover,
+a > .rating-text:focus {
+  text-decoration: underline;
+  color: #25d366;
+  font-size: 15px;
 }
 
 .reviews-grid {
