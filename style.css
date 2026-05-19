@@ -54,7 +54,7 @@ nav {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+z-index: 2147483647;
   padding: 14px 40px;
   display: flex;
   align-items: center;
